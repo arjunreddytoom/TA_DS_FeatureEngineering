@@ -58,6 +58,10 @@ data <- data[with(data, order(date, time)),]
 # Create "multiple_days" column 
 data$multiple_days <- (duplicated(data$uuid)) & !duplicated(data[, c("uuid","date")])
 
+# To classify first and repeated occurrence as TRUE,we can use the following rule:
+# data$weekday_biz <- (duplicated(data$uuid) | duplicated(data[nrow(data):1, "uuid"])[nrow(data):1]) & !duplicated(data[, c("uuid","date")])
+
+
 table(data$multiple_days)
 
 
@@ -67,9 +71,6 @@ table(data$multiple_days)
 
 # Create "weekday_biz" column
 data$weekday_biz <- (isWeekday(data$date) & ifelse(data$time>=090000 & data$time<=170000, TRUE, FALSE))
-
-# To classify first and repeated occurrence as TRUE,we can use the following rule:
-# data$weekday_biz <- (duplicated(data$uuid) | duplicated(data[nrow(data):1, "uuid"])[nrow(data):1]) & !duplicated(data[, c("uuid","date")])
 
 table(data$weekday_biz)
 
